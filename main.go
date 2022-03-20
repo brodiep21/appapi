@@ -6,7 +6,11 @@ import (
 	"log"
 	"net/http"
 )
-
+type Info struct {
+	Name string 'json: "name" '
+	Bio string  'json: "bio"'
+	Repos int  'json:"public_repos"'
+}
 func main() {
 
 	// client := &http.Client
