@@ -1,20 +1,29 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"time"
 )
-type Info struct {
-	Name string 'json: "name" '
-	Bio string  'json: "bio"'
-	Repos int  'json:"public_repos"'
-}
-func main() {
 
-	// client := &http.Client
-	req, err := http.Get("http://api.github.com/users/brodiep21")
+type Info struct {
+	Name  string `json:"name"`
+	Bio   string `json:"bio"`
+	Repos int    `json:"public_repos"`
+}
+
+func main() {
+	apiContact("http://api.github.com/users/brodiep21")
+}
+
+func apiContact(url string) {
+	var s Info
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	req, err := client.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,6 +34,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	s := string(body)
-	fmt.Printf("%q\n", s)
+	json.Unmarshal(body, &s)
+
+	fmt.Println(s)
 }
